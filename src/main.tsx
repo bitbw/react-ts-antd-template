@@ -11,5 +11,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       {/* 将RouterProvider包裹在Provider内 */}
       <RouterProvider router={router}></RouterProvider>
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

@@ -13,7 +13,7 @@ module.exports = {
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
-  plugins: ["react", "@typescript-eslint", "prettier"],
+  plugins: ["react", "@typescript-eslint", "prettier", "react-hooks"],
   rules: {
     "@typescript-eslint/no-unused-vars": "warn", // Enable rule to check for unused variables
     "react/react-in-jsx-scope": "off",
