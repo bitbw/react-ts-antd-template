@@ -58,7 +58,7 @@ const Item: React.FC<{ children: React.ReactNode }> = (props) => {
 };
 
 const List: React.FC<{ title: string; style?: React.CSSProperties }> = (
-  props
+  props,
 ) => {
   const { token } = theme.useToken();
 
@@ -109,6 +109,7 @@ const MenuCard = () => {
         }}
         type="vertical"
       />
+
       <Popover
         placement="bottom"
         overlayStyle={{
@@ -343,7 +344,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 );
               },
             }}
-            actionsRender={(props) => {
+            actionsRender={(props: any) => {
               if (props.isMobile) return [];
               if (typeof window === "undefined") return [];
               return [
