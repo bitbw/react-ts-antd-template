@@ -17,18 +17,25 @@ import {
   SettingDrawer,
 } from "@ant-design/pro-components";
 import { css } from "@emotion/css";
-import {
-  Button,
-  ConfigProvider,
-  Divider,
-  Dropdown,
-  Input,
-  Popover,
-  theme,
-} from "antd";
-import React, { useState } from "react";
+import { ConfigProvider, Divider, Dropdown, Input, Popover, theme } from "antd";
+import React, { useEffect, useState } from "react";
 import defaultProps from "./_defaultProps";
+import { useLocation, useNavigate } from "react-router-dom";
+import { RouterItem, routerList } from "@/router/routerList";
 
+let routes = [];
+
+// 将 routerList children 改成 routes
+function formateRoutes(routes: any[]) {
+  routes.forEach((route) => {
+    if (route.children) {
+      route.routes = route.children;
+      route.children = undefined;
+      formateRoutes(route.routes);
+    }
+  });
+  return routes as RouterItem[];
+}
 const Item: React.FC<{ children: React.ReactNode }> = (props) => {
   const { token } = theme.useToken();
   return (
@@ -268,8 +275,26 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     splitMenus: true,
   });
 
-  const [pathname, setPathname] = useState("/list/sub-page/sub-sub-page1");
-  const [num, setNum] = useState(40);
+  const defaultPath = "/about/sub-page1";
+
+  const [pathname, setPathname] = useState(defaultPath);
+  // const [num, setNum] = useState(40);
+  const navigateTo = useNavigate();
+  const localtion = useLocation();
+
+  // TODO: whether has auth
+  routes = formateRoutes(routerList)[0].routes || [];
+
+  useEffect(() => {
+    if (
+      localtion.pathname === "/" ||
+      /* /about */ localtion.pathname === "/about"
+    )
+      navigateTo(defaultPath);
+    // setPathname when the loacation.pathname changed
+    setPathname(localtion.pathname);
+  }, [localtion.pathname, navigateTo]);
+
   if (typeof document === "undefined") {
     return <div />;
   }
@@ -278,7 +303,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       id="test-pro-layout"
       style={{
         height: "100vh",
-        overflow: "auto",
+        // overflow: "auto",
       }}
     >
       <ProConfigProvider hashed={false}>
@@ -310,6 +335,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               },
             ]}
             {...defaultProps}
+            route={{
+              path: defaultPath,
+              routes: [...routes],
+            }}
             location={{
               pathname,
             }}
@@ -394,6 +423,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <div
                 onClick={() => {
                   setPathname(item.path || "/welcome");
+                  navigateTo(item.path || "/welcome");
                 }}
               >
                 {dom}
@@ -403,34 +433,39 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           >
             <PageContainer
               token={{
-                paddingInlinePageContainerContent: num,
+                paddingInlinePageContainerContent: 20,
               }}
-              extra={[
-                <Button key="3">操作</Button>,
-                <Button key="2">操作</Button>,
-                <Button
-                  key="1"
-                  type="primary"
-                  onClick={() => {
-                    setNum(num > 0 ? 0 : 40);
-                  }}
-                >
-                  主操作
-                </Button>,
-              ]}
-              subTitle="简单的描述"
-              footer={[
-                <Button key="3">重置</Button>,
-                <Button key="2" type="primary">
-                  提交
-                </Button>,
-              ]}
+              header={{
+                title: false,
+              }}
+              // extra={[
+              //   <Button key="3">操作</Button>,
+              //   <Button key="2">操作</Button>,
+              //   <Button
+              //     key="1"
+              //     type="primary"
+              //     onClick={() => {
+              //       setNum(num > 0 ? 0 : 40);
+              //     }}
+              //   >
+              //     主操作
+              //   </Button>,
+              // ]}
+              // subTitle="简单的描述"
+              // footer={[
+              //   <Button key="3">重置</Button>,
+              //   <Button key="2" type="primary">
+              //     提交
+              //   </Button>,
+              // ]}
             >
               <ProCard
-                style={{
-                  height: "200vh",
-                  minHeight: 800,
-                }}
+                style={
+                  {
+                    // height: "200vh",
+                    // minHeight: 800,
+                  }
+                }
               >
                 {children}
               </ProCard>
