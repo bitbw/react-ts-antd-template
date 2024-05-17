@@ -6,10 +6,9 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
-    // "plugin:jsx-a11y/recommended",
-    // "plugin:import/warnings",
-    // "plugin:prettier/recommended",
-    // "prettier",
+    "plugin:import/warnings",      // Disable import rules
+    // "plugin:jsx-a11y/recommended", // Disable a11y rules
+    // "plugin:prettier/recommended", // Disable prettier rules
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
